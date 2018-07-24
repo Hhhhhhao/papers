@@ -12,7 +12,9 @@ Paper: [Ian J. Goodfellow et al. *Generative Adversarial Nets*](https://arxiv.or
 
 ### Results
 
-![results](./images/mnist.gif)
+<p align="center">
+	![results](./images/mnist.gif)
+</p>
 
 ### Discriminator loss
 
