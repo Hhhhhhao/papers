@@ -12,19 +12,19 @@ Paper: [Ian J. Goodfellow et al. *Generative Adversarial Nets*](https://arxiv.or
 
 ### Results
 
-![results](/Users/leon/Projects/Github/papers/gan/images/mnist.gif)
+![results](./images/mnist.gif)
 
 ### Discriminator loss
 
-![dloss](/Users/leon/Projects/Github/papers/gan/images/d_loss.png)
+![dloss](./images/d_loss.png)
 
 ### Generator loss
 
-![](/Users/leon/Projects/Github/papers/gan/images/g_loss.png)
+![g_loss](./images/g_loss.png)
 
 ### Validation loss
 
-![](/Users/leon/Projects/Github/papers/gan/images/val_loss.png)
+![val_loss](./images/val_loss.png)
 
 ## Limitations
 
