@@ -2,7 +2,7 @@
 
 ## Intro
 
-Implementation of *Generative Adversarial Networks* with a multilayer perceptron generator and discriminator
+Implementation of *Generative Adversarial Networks* with a multilayer perceptron generator and discriminator.
 
 [Code](gan/gan.py)
 
@@ -29,5 +29,5 @@ Paper: [Ian J. Goodfellow et al. *Generative Adversarial Nets*](https://arxiv.or
 
 ## Limitations
 
-- As description in the paper, the update of discriminator needs to be synchronized well with the update of generator. Otherwise, the results would tent to collapse. (Generator only recover a small part of $p_{data}$)
+- As description in the paper, the update of discriminator needs to be synchronized well with the update of generator. Otherwise, the results would tent to collapse. (Generator only recover a small part of real data distribution).
 - From the results, the models clearly collapsed (to 7 and 9). One can improve the performance by incresing k in the update of the discriminator.
