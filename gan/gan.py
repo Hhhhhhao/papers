@@ -47,6 +47,10 @@ class DataGenerator:
                 yield item
 
     def load_data(self):
+        """
+        load MNIST training data and testing data
+        :return: dataset with the shape (n, h, w, 1)
+        """
         (X_train, _), (X_test, _) = mnist.load_data()
 
         if self.training:
@@ -132,13 +136,18 @@ class GAN:
         return model
 
     def train(self, epochs, batch_size=32, k=2, label_smooth=False, sample_intervals=100):
+        # initialize losses dict
         losses = {"g_loss":[], "d_loss":[], "d_acc":[], "val_loss":[]}
-        val_datagen = DataGenerator(batch_size, training=False)
 
+        # initialize data generators
+        val_datagen = DataGenerator(batch_size, training=False)
+        train_datagen = DataGenerator(batch_size, training=True)
+
+        # start training
         for epoch in range(epochs):
-            train_datagen = DataGenerator(batch_size, training=True)
             print('-' * 15, 'Epoch %d of %f' % (epoch+1, epochs), '-' * 15)
             for t in range(len(train_datagen)):
+
                 # generate batch data
                 imgs = train_datagen[t]
 
@@ -147,19 +156,18 @@ class GAN:
                 # ----------------------
                 self.discriminator.trainable = True
                 d_loss = []
-
                 for i in range(k):
-                    # Adversial ground truths
+                    # define labels
                     if label_smooth:
                         valid = np.ones((imgs.shape[0], 1)) * 0.9
                     else:
                         valid = np.ones((imgs.shape[0], 1))
-
                     fake = np.zeros((imgs.shape[0], 1))
 
+                    # generate noise
                     noise = np.random.normal(0, 1, (imgs.shape[0], self.latent_dim))
 
-                    # generate a batch of new images
+                    # generate a batch of new images from noise
                     gen_imgs = self.generator.predict(noise)
 
                     # train the discriminator
@@ -173,20 +181,25 @@ class GAN:
                 #  Train Generator
                 # ----------------------
                 self.discriminator.trainable = False
+                # generate noise and valid labels
                 noise = np.random.normal(0, 1, (imgs.shape[0], self.latent_dim))
                 valid = np.ones((imgs.shape[0], 1))
                 # train the generator (to have the discriminator label samples as valid)
                 g_loss = self.combined.train_on_batch(noise, valid)
                 losses["g_loss"].append(g_loss)
-                # Plot the progress
+
+                # Plot the progress at certain sample intervals
                 if t%sample_intervals ==0 or t == len(train_datagen)-1:
                     print("iteration:%d [D loss: %f, acc.: %.2f%%] [G loss: %f] "
                         % (t, d_loss[0], 100 * d_loss[1], g_loss))
 
+            # validation at the end of the epoch
             val_losses = {"g_loss":[], "d_loss":[], "d_acc":[]}
             for t in range(len(val_datagen)):
+                # generate validation batch
                 imgs = val_datagen[t]
-                #print(imgs.shape)
+
+                # validate discriminator and generator
                 noise = np.random.normal(0, 1, (imgs.shape[0], self.latent_dim))
                 gen_imgs = self.generator.predict(noise)
                 valid = np.ones((imgs.shape[0], 1))
