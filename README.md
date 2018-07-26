@@ -6,10 +6,14 @@ Collection of implementation of deep learning papers in Keras, espeicially CNN, 
 <b>See also:</b> [Keras-GAN](https://github.com/eriklindernoren/Keras-GAN#gan)
 
 ## Requirements
-- Keras 2.1.0
+- Keras >= 2.1.0
+- numpy
+- matplotlib
+- seaborn
 
 ## Table of Contents
-* [Implementations]
-  + [Generative Adversarial Nets]
+* Implementations
+  + [Generative Adversarial Nets](./gan)
+  + [Deep Convolutional Generative Adversarial Networks](./dcgan)
 
 
