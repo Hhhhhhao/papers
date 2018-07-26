@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5ddddc6a-bc28-4849-a527-971a8c8fab04" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gan/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gan/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gan/gan.py" beforeDir="false" afterPath="$PROJECT_DIR$/gan/gan.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,14 +13,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="gan.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/gan/gan.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="791">
-              <caret line="271" lean-forward="true" selection-start-line="271" selection-end-line="271" />
-              <folding>
-                <element signature="e#0#32#0" expanded="true" />
-              </folding>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dcgan/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="210">
+                <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -36,6 +34,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/gan/gan.py" />
+        <option value="$PROJECT_DIR$/gan/README.md" />
+        <option value="$PROJECT_DIR$/dcgan/README.md" />
       </list>
     </option>
   </component>
@@ -49,7 +49,7 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="61" />
+    <option name="x" value="118" />
     <option name="y" value="23" />
     <option name="width" value="1379" />
     <option name="height" value="877" />
@@ -69,7 +69,7 @@
             <path>
               <item name="papers" type="b2602c69:ProjectViewProjectNode" />
               <item name="papers" type="462c0819:PsiDirectoryNode" />
-              <item name="gan" type="462c0819:PsiDirectoryNode" />
+              <item name="dcgan" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -111,7 +111,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="61" y="23" width="1379" height="877" extended-state="0" />
+    <frame x="118" y="23" width="1379" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -174,13 +174,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/gan/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="570">
+            <caret line="38" column="27" selection-start-line="38" selection-start-column="27" selection-end-line="38" selection-end-column="27" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gan/gan.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="791">
-          <caret line="271" lean-forward="true" selection-start-line="271" selection-end-line="271" />
+        <state relative-caret-position="883">
+          <caret line="215" column="16" selection-start-line="215" selection-start-column="16" selection-end-line="215" selection-end-column="16" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dcgan/dcgan.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1722">
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dcgan/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="210">
+            <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>

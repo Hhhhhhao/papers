@@ -1,12 +1,18 @@
 # Generative Adversarial Nets
 
-## Intro
+## Introudction
 
 Keras implementation of *Generative Adversarial Networks* with a multilayer perceptron generator and discriminator.
 
 [Code](gan.py)
 
 Paper: [Ian J. Goodfellow et al. *Generative Adversarial Nets*](https://arxiv.org/abs/1406.2661)
+
+## Tricks
+
+- Added Batch Normalization after each Dense layer in both generator and discriminator, except for the last one, to reduce the possibility that the generator callopse into certain classes.
+- LeakyReLU in both generator and discriminator.
+- One-sided smooth.
 
 ## Details
 
@@ -29,5 +35,5 @@ Paper: [Ian J. Goodfellow et al. *Generative Adversarial Nets*](https://arxiv.or
 
 ## Limitations
 
-- As description in the paper, the update of discriminator needs to be synchronized well with the update of generator. Otherwise, the results would tent to collapse. (Generator only recover a small part of real data distribution).
-- From the results, the models clearly collapsed (to 7 and 9). One can improve the performance by adding Batch Normalization to both the generator and the discriminator.
+- As description in the paper, the update of discriminator needs to be synchronized well with the update of generator. Otherwise, the results would tend to collapse. (Generator only recover a small part of real data distribution).
+- Convergence is a problem.
