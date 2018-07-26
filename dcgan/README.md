@@ -42,8 +42,3 @@ Paper: [Alec Radford et al. *Unsupervised Representation Learning With Deep Conv
 ### Validation loss
 
 ![val_loss](./images/val_loss.png)
-
-## Limitations
-
-- As description in the paper, the update of discriminator needs to be synchronized well with the update of generator. Otherwise, the results would tend to collapse. (Generator only recover a small part of real data distribution).
-- Convergence is a problem.
