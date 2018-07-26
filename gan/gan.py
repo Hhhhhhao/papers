@@ -1,10 +1,11 @@
 from keras.datasets import mnist
-from keras.layers import Input, Dense, Reshape, Flatten, Dropout
+from keras.layers import Input, Dense, Reshape, Flatten, Dropout, BatchNormalization
 from keras.layers.advanced_activations import LeakyReLU
 from keras.models import Model
 from keras.optimizers import Adam
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 
 
@@ -72,7 +73,7 @@ class GAN:
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
         self.latent_dim = 100
 
-        g_optimizer = Adam(0.0002, beta_1=0.5)
+        g_optimizer = Adam(0.0001, beta_1=0.5)
         d_optimizer = Adam(0.0001, beta_1=0.5)
 
         # build and compile the discriminator
@@ -102,10 +103,13 @@ class GAN:
 
         x_input = Input(shape=(self.latent_dim,), name='g_input0')
         x = Dense(256, name='g_dense1')(x_input)
+        x = BatchNormalization(name='g_bn1')(x)
         x = LeakyReLU(alpha=0.2, name='g_ac1')(x)
-        x = Dense(512, name='g_dense2')(x_input)
+        x = Dense(512, name='g_dense2')(x)
+        x = BatchNormalization(name='g_bn2')(x)
         x = LeakyReLU(alpha=0.2, name='g_ac2')(x)
-        x = Dense(1024, name='g_dense3')(x_input)
+        x = Dense(1024, name='g_dense3')(x)
+        x = BatchNormalization(name='g_bn3')(x)
         x = LeakyReLU(alpha=0.2, name='g_ac3')(x)
         x = Dense(np.prod(self.img_shape), activation='sigmoid')(x)
         x_output = Reshape(self.img_shape)(x)
@@ -120,12 +124,15 @@ class GAN:
         x_input = Input(shape=self.img_shape,name='d_input0')
         x = Flatten(name='d_flatten0')(x_input)
         x = Dense(1024, name='d_dense1')(x)
+        x = BatchNormalization(name='d_bn1')(x)
         x = LeakyReLU(alpha=0.2, name='d_ac1')(x)
         x = Dropout(rate=0.3, name='d_drop1')(x)
         x = Dense(512, name='d_dense2')(x)
+        x = BatchNormalization(name='d_bn2')(x)
         x = LeakyReLU(alpha=0.2, name='d_ac2')(x)
         x = Dropout(rate=0.3, name='d_drop2')(x)
         x = Dense(256, name='d_dense3')(x)
+        x = BatchNormalization(name='d_bn3')(x)
         x = LeakyReLU(alpha=0.2, name='d_ac3')(x)
         x = Dropout(rate=0.3, name='g_drop3')(x)
         x_output = Dense(1, activation='sigmoid', name="d_dense4")(x)
@@ -141,11 +148,11 @@ class GAN:
 
         # initialize data generators
         val_datagen = DataGenerator(batch_size, training=False)
-        train_datagen = DataGenerator(batch_size, training=True)
 
         # start training
         for epoch in range(epochs):
             print('-' * 15, 'Epoch %d of %f' % (epoch+1, epochs), '-' * 15)
+            train_datagen = DataGenerator(batch_size, training=True)
             for t in range(len(train_datagen)):
 
                 # generate batch data
@@ -184,12 +191,13 @@ class GAN:
                 # generate noise and valid labels
                 noise = np.random.normal(0, 1, (imgs.shape[0], self.latent_dim))
                 valid = np.ones((imgs.shape[0], 1))
-                # train the generator (to have the discriminator label samples as valid)
+                # train the generator
+                # flip the target to resolve the gradient vanish problem
                 g_loss = self.combined.train_on_batch(noise, valid)
                 losses["g_loss"].append(g_loss)
 
                 # Plot the progress at certain sample intervals
-                if t%sample_intervals ==0 or t == len(train_datagen)-1:
+                if t%sample_intervals == 0 or t == len(train_datagen)-1:
                     print("iteration:%d [D loss: %f, acc.: %.2f%%] [G loss: %f] "
                         % (t, d_loss[0], 100 * d_loss[1], g_loss))
 
@@ -224,7 +232,7 @@ class GAN:
         return losses
 
     def sample_images(self, epoch):
-        r, c = 5, 5
+        r, c = 8, 8
         noise = np.random.normal(0, 1, (r*c, self.latent_dim))
         gen_imgs = self.generator.predict(noise)
 
@@ -242,8 +250,11 @@ class GAN:
 
 if __name__ == '__main__':
     gan = GAN()
-    losses = gan.train(epochs=100, batch_size=64, k=4, label_smooth=True, sample_intervals=100)
+    losses = gan.train(epochs=10, batch_size=64, k=1, label_smooth=True, sample_intervals=100)
     color = ['b', 'g', 'r', 'tab:orange']
+    sns.set(color_codes=True)
+    sns.set_style("white")
+    sns.set_context("notebook", font_scale=1, rc={"lines.linewidth": 1})
     for key in enumerate(losses.keys()):
         plt.plot(losses[key[1]], color[key[0]])
         plt.xlabel('iterations')
