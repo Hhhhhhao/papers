@@ -24,33 +24,34 @@ Paper: [Alec Radford et al. *Unsupervised Representation Learning With Deep Conv
 ## Details
 
 ### Training process
+Results gif during training.
 
 ![training](./images/results.gif)
 
 ### Results
 Results after training 30 epochs.
 
-![results](./images/30.gif)
+![results](./images/30.png)
 
 
 ### Discriminator loss
-
+Plot of training discriminator loss.
 ![dloss](./images/d_loss.png)
 
 ### Discriminator accuracy
-real samples acc.
+Training real samples acc.
 ![d_real_acc](./images/d_acc_real.png)
 
-fake samples acc.
+Training fake samples acc.
 ![d_real_acc](./images/d_acc_fake.png)
 
 
 ### Generator loss
-
+Plot of training generator loss.
 ![g_loss](./images/g_loss.png)
 
 ### Validation loss
-
+Plot of validation generator loss.
 ![val_loss](./images/val_loss.png)
 
 ### Validation accuracy

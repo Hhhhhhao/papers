@@ -2,26 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5ddddc6a-bc28-4849-a527-971a8c8fab04" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dcgan/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/dcgan/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/dcgan.py" beforeDir="false" afterPath="$PROJECT_DIR$/dcgan/dcgan.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/23.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/30.png" beforeDir="false" afterPath="$PROJECT_DIR$/dcgan/images/30.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/40.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/50.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/d_acc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/d_loss.png" beforeDir="false" afterPath="$PROJECT_DIR$/dcgan/images/d_loss.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/g_loss.png" beforeDir="false" afterPath="$PROJECT_DIR$/dcgan/images/g_loss.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/results.gif" beforeDir="false" afterPath="$PROJECT_DIR$/dcgan/images/results.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/images/val_loss.png" beforeDir="false" afterPath="$PROJECT_DIR$/dcgan/images/val_loss.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gan/gan.py" beforeDir="false" afterPath="$PROJECT_DIR$/gan/gan.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -39,8 +20,8 @@
         <entry file="file://$PROJECT_DIR$/dcgan/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="671">
-                <caret line="61" column="37" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+              <first_editor relative-caret-position="536">
+                <caret line="53" column="34" selection-start-line="53" selection-start-column="34" selection-end-line="53" selection-end-column="34" />
               </first_editor>
               <second_editor />
             </state>
@@ -349,8 +330,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dcgan/dcgan.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1239">
-          <caret line="121" column="8" selection-start-line="121" selection-start-column="8" selection-end-line="121" selection-end-column="8" />
+        <state relative-caret-position="913">
+          <caret line="170" lean-forward="true" selection-start-line="170" selection-end-line="170" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -360,8 +341,8 @@
     <entry file="file://$PROJECT_DIR$/dcgan/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="671">
-            <caret line="61" column="37" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
+          <first_editor relative-caret-position="536">
+            <caret line="53" column="34" selection-start-line="53" selection-start-column="34" selection-end-line="53" selection-end-column="34" />
           </first_editor>
           <second_editor />
         </state>
