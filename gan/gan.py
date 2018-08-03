@@ -73,8 +73,8 @@ class GAN:
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
         self.latent_dim = 100
 
-        g_optimizer = Adam(0.0001, beta_1=0.5)
-        d_optimizer = Adam(0.0001, beta_1=0.5)
+        g_optimizer = Adam(0.0002)
+        d_optimizer = Adam(0.0002)
 
         # build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -142,9 +142,10 @@ class GAN:
 
         return model
 
-    def train(self, epochs, batch_size=32, k=2, label_smooth=False, sample_intervals=100):
+    def train(self, epochs, batch_size=32, k=1, label_smooth=False, sample_intervals=100):
         # initialize losses dict
-        losses = {"g_loss":[], "d_loss":[], "d_acc":[], "val_loss":[]}
+        losses = {"g_loss": [], "d_loss": [], "val_loss": [], "d_acc_real": [], "d_acc_fake": [], "val_real_acc": [],
+                  "val_fake_acc": []}
 
         # initialize data generators
         val_datagen = DataGenerator(batch_size, training=False)
@@ -162,7 +163,9 @@ class GAN:
                 #  Train Discriminator
                 # ----------------------
                 self.discriminator.trainable = True
-                d_loss = []
+                d_loss = None
+                d_loss_fake = None
+                d_loss_real = None
                 for i in range(k):
                     # define labels
                     if label_smooth:
@@ -182,7 +185,8 @@ class GAN:
                     d_loss_fake = self.discriminator.train_on_batch(gen_imgs, fake)
                     d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
                     losses["d_loss"].append(d_loss[0])
-                    losses["d_acc"].append(100 * d_loss[1])
+                    losses["d_acc_real"].append(100 * d_loss_real[1])
+                    losses["d_acc_fake"].append(100 * d_loss_fake[1])
 
                 # ----------------------
                 #  Train Generator
@@ -198,11 +202,11 @@ class GAN:
 
                 # Plot the progress at certain sample intervals
                 if t%sample_intervals == 0 or t == len(train_datagen)-1:
-                    print("iteration:%d [D loss: %f, acc.: %.2f%%] [G loss: %f] "
-                        % (t, d_loss[0], 100 * d_loss[1], g_loss))
+                    print("iteration:%d [D loss: %a, real acc.: %.2f%%, fake acc.: %.2g%%] [G loss: %g] "
+                        % (t, d_loss[0], 100 * d_loss_real[1], 100 * d_loss_fake[1], g_loss))
 
             # validation at the end of the epoch
-            val_losses = {"g_loss":[], "d_loss":[], "d_acc":[]}
+            val_losses = {"g_loss": [], "d_loss": [], "d_acc_real": [], "d_acc_fake": []}
             for t in range(len(val_datagen)):
                 # generate validation batch
                 imgs = val_datagen[t]
@@ -212,19 +216,23 @@ class GAN:
                 gen_imgs = self.generator.predict(noise)
                 valid = np.ones((imgs.shape[0], 1))
                 fake = np.zeros((imgs.shape[0], 1))
-                digits = valid + fake
-                val_batch = imgs + gen_imgs
-                d_loss = self.discriminator.test_on_batch(val_batch, digits)
+                d_loss_real = self.discriminator.test_on_batch(imgs, valid)
+                d_loss_fake = self.discriminator.test_on_batch(gen_imgs, fake)
                 g_loss = self.combined.test_on_batch(noise, valid)
-                val_losses["d_loss"].append(d_loss[0])
-                val_losses["d_acc"].append(d_loss[1])
+                d_loss = 0.5 * np.add(d_loss_fake[0], d_loss_real[0])
+                val_losses["d_loss"].append(d_loss)
+                val_losses["d_acc_real"].append(d_loss_real[1] * 100)
+                val_losses["d_acc_fake"].append(d_loss_fake[1] * 100)
                 val_losses["g_loss"].append(g_loss)
             losses["val_loss"] += val_losses["g_loss"]
+            losses["val_real_acc"] += val_losses["d_acc_real"]
+            losses["val_fake_acc"] += val_losses["d_acc_fake"]
+            losses["val_loss"] += val_losses["g_loss"]
             # Plot the progress
-            print("validation [D loss: %f, acc.: %.2f%%] [G loss: %f] "
-                  % (np.mean(val_losses["d_loss"]), 100 * np.mean(val_losses["d_acc"]), np.mean(val_losses["g_loss"])))
+            print("validation [D loss: %a, real acc.: %.2f%%, fake acc.:%.2g%%] [G loss: %g] "
+                  % (np.mean(val_losses["d_loss"]), np.mean(val_losses["d_acc_real"]), np.mean(val_losses["d_acc_fake"]), np.mean(val_losses["g_loss"])))
             # save generated samples at epoch end
-            self.sample_images(epoch)
+            self.sample_images(epoch+1)
 
         self.generator.save_weights(filepath="./weights/generator.hdf5")
         self.discriminator.save_weights(filepath="./weights/discriminator.hdf5")
@@ -232,7 +240,8 @@ class GAN:
         return losses
 
     def sample_images(self, epoch):
-        r, c = 8, 8
+        r, c = 5, 5
+        np.random.seed(1)
         noise = np.random.normal(0, 1, (r*c, self.latent_dim))
         gen_imgs = self.generator.predict(noise)
 
@@ -244,28 +253,36 @@ class GAN:
                 axs[i,j].imshow(gen_imgs[count, :, :, 0], cmap='gray')
                 axs[i,j].axis('off')
                 count += 1
-            fig.savefig("images/%d.png" % epoch)
+            fig.savefig("samples/%d.png" % epoch)
             plt.close()
 
 
 if __name__ == '__main__':
     gan = GAN()
     losses = gan.train(epochs=10, batch_size=64, k=1, label_smooth=True, sample_intervals=100)
-    color = ['b', 'g', 'r', 'tab:orange']
+
+    color = ['b', 'g', 'tab:orange', 'r', 'r', 'r', 'r']
     sns.set(color_codes=True)
     sns.set_style("white")
     sns.set_context("notebook", font_scale=1, rc={"lines.linewidth": 1})
-    for key in enumerate(losses.keys()):
-        plt.plot(losses[key[1]], color[key[0]])
-        plt.xlabel('iterations')
 
-        if key[1] == 'd_acc':
-            plt.ylabel('accuracy')
-        else:
+    for i, key in enumerate(losses.keys()):
+        if i <= 2:
+            plt.plot(losses[key], color[i])
+            plt.xlabel('iterations')
             plt.ylabel('loss')
-
-        plt.savefig("./" + key[1] + ".png")
-        plt.show()
-        plt.close()
+            plt.savefig("./losses/" + key[1] + ".png")
+            plt.show()
+            plt.close()
+        elif i == 3 or i == 5:
+            plt.plot(losses[key], 'r', label='real samples acc.')
+            plt.plot(losses[list(losses.keys())[i+1]], 'b', label='fake samples acc.')
+            plt.xlabel('iterations')
+            plt.ylabel('accuracy')
+            plt.savefig("./losses/" + key[1] + ".png")
+            plt.show()
+            plt.close()
+        else:
+            pass
 
 

@@ -13,7 +13,7 @@ Paper: [Alec Radford et al. *Unsupervised Representation Learning With Deep Conv
 ### As described in the paper
 
 - Use fully convolutional net, which replace spatial pooling functions with strided convolutions, allowing the network to learn its own spatial downsampling.
-- Eliminating fully connected layers on the top of convolutional features.
+- Eliminating fully connected layers on the top of convolutional features. (Added a fully connected layer at the discriminator to ensure good results.)
 - Batch Normalization, whichi stabilizes learning by normalizaing the input to each unit to have zero mean and unit variance. Directly appliying batchnorm to all layers, however, results in sample oscillation and model instability. This was avoided by not applying batchnorm to the generator output layer and the discriminator input layer.
 
 ### Additional tricks
@@ -23,9 +23,14 @@ Paper: [Alec Radford et al. *Unsupervised Representation Learning With Deep Conv
 
 ## Details
 
-### Results
+### Training process
 
-![results](./images/results.gif)
+![training](./images/results.gif)
+
+### Results
+Results after training 30 epochs.
+
+![results](./images/30.gif)
 
 
 ### Discriminator loss
@@ -33,7 +38,12 @@ Paper: [Alec Radford et al. *Unsupervised Representation Learning With Deep Conv
 ![dloss](./images/d_loss.png)
 
 ### Discriminator accuracy
-![dacc](./images/d_acc.png)
+real samples acc.
+![d_real_acc](./images/d_acc_real.png)
+
+fake samples acc.
+![d_real_acc](./images/d_acc_fake.png)
+
 
 ### Generator loss
 
@@ -42,3 +52,11 @@ Paper: [Alec Radford et al. *Unsupervised Representation Learning With Deep Conv
 ### Validation loss
 
 ![val_loss](./images/val_loss.png)
+
+### Validation accuracy
+
+real samples acc.
+![val_real_acc](./images/val_real_acc.png)
+
+fake samples acc.
+![val_real_acc](./images/val_fake_acc.png)
