@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5ddddc6a-bc28-4849-a527-971a8c8fab04" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/weights/discriminator.hdf5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dcgan/weights/generator.hdf5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gan/gan.py" beforeDir="false" afterPath="$PROJECT_DIR$/gan/gan.py" afterDir="false" />
-    </list>
+    <list default="true" id="5ddddc6a-bc28-4849-a527-971a8c8fab04" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +17,8 @@
       <file leaf-file-name="dcgan.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dcgan/dcgan.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1395">
-              <caret line="93" column="24" lean-forward="true" selection-start-line="93" selection-start-column="24" selection-end-line="93" selection-end-column="24" />
+            <state relative-caret-position="489">
+              <caret line="93" column="24" selection-start-line="93" selection-start-column="24" selection-end-line="93" selection-end-column="24" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -56,10 +51,10 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="55" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="61" />
     <option name="y" value="23" />
-    <option name="width" value="1385" />
+    <option name="width" value="1379" />
     <option name="height" value="877" />
   </component>
   <component name="ProjectView">
@@ -67,7 +62,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -75,10 +69,16 @@
               <item name="papers" type="b2602c69:ProjectViewProjectNode" />
               <item name="papers" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="papers" type="b2602c69:ProjectViewProjectNode" />
+              <item name="papers" type="462c0819:PsiDirectoryNode" />
+              <item name="dcgan" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -141,6 +141,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="61" y="23" width="1379" height="877" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
@@ -177,13 +178,20 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/dcgan/dcgan.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1230">
+          <caret line="93" column="24" lean-forward="true" selection-start-line="93" selection-start-column="24" selection-end-line="93" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gan/gan.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -191,9 +199,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1095">
           <caret line="73" lean-forward="true" selection-start-line="73" selection-end-line="73" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -201,9 +206,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3585">
           <caret line="239" lean-forward="true" selection-start-line="239" selection-end-line="239" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -211,9 +213,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2520">
           <caret line="168" column="16" selection-start-line="168" selection-start-column="16" selection-end-line="168" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -221,9 +220,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3420">
           <caret line="228" column="42" lean-forward="true" selection-start-line="228" selection-start-column="42" selection-end-line="228" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -231,9 +227,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3855">
           <caret line="257" column="12" lean-forward="true" selection-start-line="257" selection-start-column="12" selection-end-line="257" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -407,16 +400,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1428">
           <caret line="25" selection-start-line="25" selection-end-line="25" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dcgan/dcgan.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1395">
-          <caret line="93" column="24" lean-forward="true" selection-start-line="93" selection-start-column="24" selection-end-line="93" selection-end-column="24" />
+        <state relative-caret-position="489">
+          <caret line="93" column="24" selection-start-line="93" selection-start-column="24" selection-end-line="93" selection-end-column="24" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
