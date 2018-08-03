@@ -1,6 +1,7 @@
 from keras.datasets import mnist
-from keras.layers import Input, Dense, Reshape, Flatten, Dropout, BatchNormalization
+from keras.layers import Input, Dense, Reshape, Flatten, Dropout, BatchNormalization, Activation
 from keras.layers.advanced_activations import LeakyReLU
+from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
 from keras.optimizers import Adam
 
@@ -9,72 +10,22 @@ import seaborn as sns
 import numpy as np
 
 
-class DataGenerator:
-    def __init__(self, batch_size=32, training=True):
-        """
-        Date generator for training and validation
-        :param batch_size: the batch size
-        :param training: if True, this data generator is used for training
-
-        return: an iterator with length defined in __len__(self)
-        """
-        self.batch_size = batch_size
-        self.training = training
-        # load the dataset
-        self.X, self.num = self.load_data()
-
-    def __len__(self):
-        """Number of batch in the Sequence.
-        # Returns
-            The number of batches in the Sequence.
-        """
-        return int(np.ceil(self.num / float(self.batch_size)))
-
-    def __getitem__(self, idx):
-        """Gets batch at position `index`.
-        # Arguments
-            index: position of the batch in the Sequence.
-        # Returns
-            A batch
-        """
-        batch = self.X[idx * self.batch_size:(idx + 1) * self.batch_size]
-
-        return batch
-
-    def __iter__(self):
-        """Create an infinite generator that iterate over the Sequence."""
-        while True:
-            for item in (self[i] for i in range(len(self))):
-                yield item
-
-    def load_data(self):
-        """
-        load MNIST training data and testing data
-        :return: dataset with the shape (n, h, w, 1)
-        """
-        (X_train, _), (X_test, _) = mnist.load_data()
-
-        if self.training:
-            np.random.shuffle(X_train)
-            X_train = X_train / 255.
-            X_train = np.expand_dims(X_train, axis=-1)
-            return X_train, X_train.shape[0]
-        else:
-            X_test = X_test / 255.
-            X_test = np.expand_dims(X_test, axis=-1)
-            return X_test, X_test.shape[0]
-
-
 class GAN:
     def __init__(self):
+
+        (self.x_train, _), (self.x_test, _) = mnist.load_data()
+        self.x_train = np.expand_dims(self.x_train, axis=-1)
+        print(self.x_train.shape)
+        self.x_test = np.expand_dims(self.x_test, axis=-1)
+
         self.img_rows = 28
         self.img_cols = 28
         self.channels = 1
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
         self.latent_dim = 100
 
-        g_optimizer = Adam(0.0002)
-        d_optimizer = Adam(0.0002)
+        g_optimizer = Adam(0.0002, beta_1=0.5)
+        d_optimizer = Adam(0.0002, beta_1=0.5)
 
         # build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -104,13 +55,13 @@ class GAN:
         x_input = Input(shape=(self.latent_dim,), name='g_input0')
         x = Dense(256, name='g_dense1')(x_input)
         x = BatchNormalization(name='g_bn1')(x)
-        x = LeakyReLU(alpha=0.2, name='g_ac1')(x)
+        x = LeakyReLU(alpha=0.2)(x)
         x = Dense(512, name='g_dense2')(x)
         x = BatchNormalization(name='g_bn2')(x)
-        x = LeakyReLU(alpha=0.2, name='g_ac2')(x)
+        x = LeakyReLU(alpha=0.2)(x)
         x = Dense(1024, name='g_dense3')(x)
         x = BatchNormalization(name='g_bn3')(x)
-        x = LeakyReLU(alpha=0.2, name='g_ac3')(x)
+        x = LeakyReLU(alpha=0.2)(x)
         x = Dense(np.prod(self.img_shape), activation='sigmoid')(x)
         x_output = Reshape(self.img_shape)(x)
 
@@ -121,20 +72,17 @@ class GAN:
 
     def build_discriminator(self):
 
-        x_input = Input(shape=self.img_shape,name='d_input0')
+        x_input = Input(shape=self.img_shape, name='d_input0')
         x = Flatten(name='d_flatten0')(x_input)
         x = Dense(1024, name='d_dense1')(x)
-        x = BatchNormalization(name='d_bn1')(x)
+        x = BatchNormalization(name='d_bn2')(x)
         x = LeakyReLU(alpha=0.2, name='d_ac1')(x)
-        x = Dropout(rate=0.3, name='d_drop1')(x)
         x = Dense(512, name='d_dense2')(x)
         x = BatchNormalization(name='d_bn2')(x)
         x = LeakyReLU(alpha=0.2, name='d_ac2')(x)
-        x = Dropout(rate=0.3, name='d_drop2')(x)
         x = Dense(256, name='d_dense3')(x)
         x = BatchNormalization(name='d_bn3')(x)
         x = LeakyReLU(alpha=0.2, name='d_ac3')(x)
-        x = Dropout(rate=0.3, name='g_drop3')(x)
         x_output = Dense(1, activation='sigmoid', name="d_dense4")(x)
 
         model = Model(inputs=x_input, outputs=x_output, name='discriminator')
@@ -142,51 +90,55 @@ class GAN:
 
         return model
 
-    def train(self, epochs, batch_size=32, k=1, label_smooth=False, sample_intervals=100):
+    def train(self, epochs, batch_size=32, label_smooth=False, sample_intervals=100):
         # initialize losses dict
         losses = {"g_loss": [], "d_loss": [], "val_loss": [], "d_acc_real": [], "d_acc_fake": [], "val_real_acc": [],
                   "val_fake_acc": []}
 
-        # initialize data generators
-        val_datagen = DataGenerator(batch_size, training=False)
+        train_datagen = ImageDataGenerator(
+            rescale=1/255.)
+        val_datagen = ImageDataGenerator(rescale=1/255.)
+
+        train_datagen.fit(self.x_train)
+        val_datagen.fit(self.x_test)
+
+        train_generator = train_datagen.flow(self.x_train, batch_size=batch_size)
+        val_generator = val_datagen.flow(self.x_test, batch_size=batch_size)
 
         # start training
         for epoch in range(epochs):
             print('-' * 15, 'Epoch %d of %f' % (epoch+1, epochs), '-' * 15)
-            train_datagen = DataGenerator(batch_size, training=True)
-            for t in range(len(train_datagen)):
+            for t in range(len(train_generator)):
 
                 # generate batch data
-                imgs = train_datagen[t]
+                imgs = train_generator[t]
 
                 # ----------------------
                 #  Train Discriminator
                 # ----------------------
                 self.discriminator.trainable = True
-                d_loss = None
-                d_loss_fake = None
-                d_loss_real = None
-                for i in range(k):
-                    # define labels
-                    if label_smooth:
-                        valid = np.ones((imgs.shape[0], 1)) * 0.9
-                    else:
-                        valid = np.ones((imgs.shape[0], 1))
-                    fake = np.zeros((imgs.shape[0], 1))
 
-                    # generate noise
-                    noise = np.random.normal(0, 1, (imgs.shape[0], self.latent_dim))
+                # define labels
+                if label_smooth:
+                    valid = np.ones((imgs.shape[0], 1)) * 0.9
+                else:
+                    valid = np.ones((imgs.shape[0], 1))
 
-                    # generate a batch of new images from noise
-                    gen_imgs = self.generator.predict(noise)
+                fake = np.zeros((imgs.shape[0], 1))
 
-                    # train the discriminator
-                    d_loss_real = self.discriminator.train_on_batch(imgs, valid)
-                    d_loss_fake = self.discriminator.train_on_batch(gen_imgs, fake)
-                    d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
-                    losses["d_loss"].append(d_loss[0])
-                    losses["d_acc_real"].append(100 * d_loss_real[1])
-                    losses["d_acc_fake"].append(100 * d_loss_fake[1])
+                # generate noise
+                noise = np.random.normal(0, 1, (imgs.shape[0], self.latent_dim))
+
+                # generate a batch of new images from noise
+                gen_imgs = self.generator.predict(noise)
+
+                # train the discriminator
+                d_loss_real = self.discriminator.train_on_batch(imgs, valid)
+                d_loss_fake = self.discriminator.train_on_batch(gen_imgs, fake)
+                d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
+                losses["d_loss"].append(d_loss[0])
+                losses["d_acc_real"].append(100 * d_loss_real[1])
+                losses["d_acc_fake"].append(100 * d_loss_fake[1])
 
                 # ----------------------
                 #  Train Generator
@@ -201,15 +153,15 @@ class GAN:
                 losses["g_loss"].append(g_loss)
 
                 # Plot the progress at certain sample intervals
-                if t%sample_intervals == 0 or t == len(train_datagen)-1:
+                if t%sample_intervals == 0 or t == len(train_generator)-1:
                     print("iteration:%d [D loss: %a, real acc.: %.2f%%, fake acc.: %.2g%%] [G loss: %g] "
                         % (t, d_loss[0], 100 * d_loss_real[1], 100 * d_loss_fake[1], g_loss))
 
             # validation at the end of the epoch
             val_losses = {"g_loss": [], "d_loss": [], "d_acc_real": [], "d_acc_fake": []}
-            for t in range(len(val_datagen)):
+            for t in range(len(val_generator)):
                 # generate validation batch
-                imgs = val_datagen[t]
+                imgs = val_generator[t]
 
                 # validate discriminator and generator
                 noise = np.random.normal(0, 1, (imgs.shape[0], self.latent_dim))
@@ -259,7 +211,7 @@ class GAN:
 
 if __name__ == '__main__':
     gan = GAN()
-    losses = gan.train(epochs=10, batch_size=64, k=1, label_smooth=True, sample_intervals=100)
+    losses = gan.train(epochs=10, batch_size=128, label_smooth=False, sample_intervals=100)
 
     color = ['b', 'g', 'tab:orange', 'r', 'r', 'r', 'r']
     sns.set(color_codes=True)
@@ -274,15 +226,13 @@ if __name__ == '__main__':
             plt.savefig("./losses/" + key[1] + ".png")
             plt.show()
             plt.close()
-        elif i == 3 or i == 5:
-            plt.plot(losses[key], 'r', label='real samples acc.')
-            plt.plot(losses[list(losses.keys())[i+1]], 'b', label='fake samples acc.')
+        else:
+            plt.plot(losses[key], color[i])
+            plt.ylim((0,100))
             plt.xlabel('iterations')
             plt.ylabel('accuracy')
             plt.savefig("./losses/" + key[1] + ".png")
             plt.show()
             plt.close()
-        else:
-            pass
 
 
