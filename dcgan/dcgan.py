@@ -197,7 +197,7 @@ class GAN:
                 # Plot the progress
                 if t%sample_intervals ==0 or t == len(train_generator)-1:
                     print("iteration:%d [D real loss: %.5a, fake loss: %.5a, real acc.: %.2f%%, fake acc.: %.2f%%] [G "
-                          "loss: %g] "
+                          "loss: %.8a] "
                         % (t, d_loss_real[0], d_loss_fake[0], np.mean(d_acc["real"]), np.mean(d_acc["fake"]), g_loss))
                     losses["d_acc_real"].append(np.mean(d_acc["real"]))
                     losses["d_acc_fake"].append(np.mean(d_acc["fake"]))
@@ -222,7 +222,7 @@ class GAN:
             losses["val_real_acc"].append(np.mean(val_losses["d_acc_real"]))
             losses["val_fake_acc"].append(np.mean(val_losses["d_acc_fake"]))
             # Plot the progress
-            print("validation [D real loss: %.5a, fake loss: %.5a, real acc.: %.2f%%, fake acc.:%.2f%%] [G loss: %g] "
+            print("validation [D real loss: %.5a, fake loss: %.5a, real acc.: %.2f%%, fake acc.:%.2f%%] [G loss: %.8a] "
                   % (np.mean(val_losses["d_loss_real"]), np.mean(val_losses["d_loss_real"]),
                      np.mean(val_losses["d_acc_real"]), np.mean(val_losses["d_acc_fake"]),
                      np.mean(val_losses["g_loss"])))
