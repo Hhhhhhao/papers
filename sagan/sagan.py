@@ -225,9 +225,9 @@ class GAN:
                 val_losses["d_acc_real"].append(d_loss_real[1] * 100)
                 val_losses["d_acc_fake"].append(d_loss_fake[1] * 100)
                 val_losses["g_loss"].append(g_loss)
-            losses["val_loss"] += val_losses["g_loss"]
-            losses["val_real_acc"] += val_losses["d_acc_real"]
-            losses["val_fake_acc"] += val_losses["d_acc_fake"]
+            losses["val_loss"].append(np.mean(val_losses["g_loss"]))
+            losses["val_real_acc"].append(np.mean(val_losses["d_acc_real"]))
+            losses["val_fake_acc"].append(np.mean(val_losses["d_acc_fake"]))
             # Plot the progress
             print("validation [D real loss: %.5a, fake loss: %.5a, real acc.: %.2f%%, fake acc.:%.2f%%] [G loss: %g] "
                   % (np.mean(val_losses["d_loss_real"]), np.mean(val_losses["d_loss_real"]), 
@@ -261,7 +261,9 @@ class GAN:
         else:
             for i in range(r):
                 for j in range(c):
-                    axs[i, j].imshow(gen_imgs[count])
+                    img = gen_imgs[count] * 255
+                    img = img.astype(np.uint8)
+                    axs[i, j].imshow(img)
                     axs[i, j].axis('off')
                     count += 1
                 fig.savefig(self.sample_dir + "/%d.png" % epoch)

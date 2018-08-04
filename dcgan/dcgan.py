@@ -1,12 +1,13 @@
 from keras.datasets import mnist, cifar10
-from keras.layers import Input, Dense, Reshape, Flatten, Dropout, MaxPool2D
-from keras.layers import Activation, Conv2D, Conv2DTranspose, UpSampling2D, BatchNormalization
+from keras.layers import Input, Dense, Reshape, Flatten
+from keras.layers import Activation, Conv2D, UpSampling2D, BatchNormalization
 from keras.layers.advanced_activations import LeakyReLU
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
 
 import matplotlib.pyplot as plt
+import cv2
 import seaborn as sns
 import numpy as np
 import os
@@ -22,14 +23,19 @@ class GAN:
     def __init__(self, dataset='MNIST'):
         self.dataset = dataset
         if dataset == 'MNIST':
-            (self.x_train, _), (self.x_test, _) = mnist.load_data()
+            (x_train, _), (x_test, _) = mnist.load_data()
+            self.x_train = []
+            self.x_test = []
+            for i, img in enumerate(x_train):
+                img = cv2.resize(img, dsize=(32, 32))
+                self.x_train.append(img)
+            for i, img in enumerate(x_test):
+                img = cv2.resize(img, dsize=(32, 32))
+                self.x_test.append(img)
             self.x_train = np.expand_dims(self.x_train, axis=-1)
-            print(self.x_train.shape)
             self.x_test = np.expand_dims(self.x_test, axis=-1)
-            self.ini_size = 7
         elif dataset == 'cifar10':
             (self.x_train, _), (self.x_test, _) = cifar10.load_data()
-            self.ini_size = 8
         else:
             raise ValueError("dataset:{} is not valid".format(dataset))
 
@@ -39,12 +45,14 @@ class GAN:
         self.img_rows = self.x_train.shape[1]
         self.img_cols = self.x_train.shape[2]
         self.channels = self.x_train.shape[-1]
-        print(self.channels)
+        self.layer_num = int(np.log2(self.img_rows)) - 2
+        self.ini_size = self.img_rows // (2 ** self.layer_num)
+        print(self.ini_size)
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
         self.latent_dim = 100
 
         g_optimizer = Adam(0.0002, beta_1=0.5)
-        d_optimizer = Adam(0.0002, beta_1=0.5)
+        d_optimizer = Adam(0.0004, beta_1=0.5)
 
         # build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -70,32 +78,30 @@ class GAN:
         self.combined.summary()
 
     def build_generator(self):
+        ch = 1024
+        x_input = Input(shape=(self.latent_dim,))
 
-        x_input = Input(shape=(self.latent_dim,), name='g_input0')
-        x = Dense(self.ini_size * self.ini_size * 128, name='g_dense1')(x_input)
-        x = BatchNormalization(name='g_bn1')(x)
-        x = Activation('relu', name='g_ac1')(x)
+        x = Dense(self.ini_size * self.ini_size * ch)(x_input)
+        x = BatchNormalization()(x)
+        x = Activation('relu')(x)
+        x = Reshape((self.ini_size, self.ini_size, ch))(x)
 
-        x = Reshape((self.ini_size, self.ini_size, 128), name='g_reshape1')(x)
+        for i in range(self.layer_num // 2):
+            x = UpSampling2D((2, 2))(x)
+            x = Conv2D(ch//2, kernel_size=3, strides=1, padding='same')(x)
+            x = BatchNormalization()(x)
+            x = Activation('relu')(x)
+            ch = ch//2
 
-        x = UpSampling2D((2, 2), name='g_up2')(x)
-        x = Conv2D(128, kernel_size=5, strides=1, padding='same', name='g_conv2')(x)
-        x = BatchNormalization(name='g_bn2')(x)
-        x = Activation('relu', name='g_ac2')(x)
-        x = Conv2D(64, kernel_size=5, strides=1, padding='same', name='g_conv3')(x)
-        x = BatchNormalization(name='g_bn3')(x)
-        x = Activation('relu', name='g_ac3')(x)
-        x = UpSampling2D((2, 2), name='g_up3')(x)
-        x = Conv2D(32, kernel_size=5, strides=1, padding='same', name='g_conv4')(x)
-        x = BatchNormalization(name='g_bn4')(x)
-        x = Activation('relu', name='g_ac4')(x)
+        for i in range(self.layer_num // 2, self.layer_num):
+            x = UpSampling2D((2, 2))(x)
+            x = Conv2D(ch//2, kernel_size=3, strides=1, padding='same')(x)
+            x = BatchNormalization()(x)
+            x = Activation('relu')(x)
+            ch = ch//2
 
-        x = Conv2D(3, kernel_size=5, strides=1, padding='same', name='g_conv5')(x)
-        x = BatchNormalization(name='g_bn5')(x)
-        x = Activation('relu', name='g_ac5')(x)
-
-        x = Conv2D(self.channels, kernel_size=3, strides=1, padding='same', name='g_conv6')(x)
-        x_output = Activation('sigmoid', name='g_ac6')(x)
+        x = Conv2D(self.channels, kernel_size=3, strides=1, padding='same')(x)
+        x_output = Activation('sigmoid')(x)
 
         model = Model(inputs=x_input, outputs=x_output, name='generator')
         model.summary()
@@ -103,24 +109,27 @@ class GAN:
         return model
 
     def build_discriminator(self):
+        ch = 64
+        x_input = Input(shape=self.img_shape)
+        x = Conv2D(ch, kernel_size=5, strides=1, padding='same')(x_input)
+        x = BatchNormalization()(x)
+        x = LeakyReLU(alpha=0.2)(x)
 
-        x_input = Input(shape=self.img_shape,name='d_input0')
-        x = Conv2D(32, kernel_size=5, strides=1, padding='same', name='d_conv1')(x_input)
-        x = BatchNormalization(name='d_bn1')(x)
-        x = LeakyReLU(alpha=0.2, name='d_ac1')(x)
-        x = MaxPool2D((2,2))(x)
-        x = Conv2D(64, kernel_size=5, strides=1, padding='same', name='d_conv2')(x)
-        x = BatchNormalization(name='d_bn2')(x)
-        x = LeakyReLU(alpha=0.2, name='d_ac2')(x)
-        x = MaxPool2D((2, 2))(x)
-        x = Conv2D(128, kernel_size=5, strides=1, padding='same', name='d_conv3')(x)
-        x = BatchNormalization(name='d_bn3')(x)
-        x = LeakyReLU(alpha=0.2, name='d_ac3')(x)
-        x = MaxPool2D((2, 2))(x)
-        x = Flatten(name='d_flatten4')(x)
-        x = Dense(1024, activation='relu', name="d_dense4")(x)
-        x = Dropout(0.2)(x)
-        x_output = Dense(1, activation='sigmoid', name="d_dense5")(x)
+        for i in range(self.layer_num // 2):
+            x = Conv2D(ch * 2, kernel_size=5, strides=2, padding='same')(x)
+            x = BatchNormalization()(x)
+            x = LeakyReLU(alpha=0.2)(x)
+            ch = ch * 2
+
+        for i in range(self.layer_num // 2, self.layer_num):
+            x = Conv2D(ch * 2, kernel_size=5, strides=2, padding='same')(x)
+            x = BatchNormalization()(x)
+            x = LeakyReLU(alpha=0.2)(x)
+            ch = ch * 2
+
+        x = Conv2D(4, kernel_size=5, strides=1, padding='same')(x)
+        x = Flatten()(x)
+        x_output = Dense(1, activation='sigmoid')(x)
 
         model = Model(inputs=x_input, outputs=x_output, name='discriminator')
         model.summary()
@@ -128,13 +137,11 @@ class GAN:
         return model
 
     def train(self, epochs, batch_size=64, label_smooth=False, sample_intervals=100):
-        losses = {"g_loss":[], "d_real_loss":[], "d_fake_loss":[], "val_loss":[], "d_acc_real":[], "d_acc_fake":[], "val_real_acc":[], "val_fake_acc":[]}
+        losses = {"g_loss":[], "d_real_loss":[], "d_fake_loss":[], "val_loss":[], "d_acc_real":[], "d_acc_fake":[],
+                  "val_real_acc":[], "val_fake_acc":[]}
 
         train_datagen = ImageDataGenerator(
-            rotation_range=10,
-            rescale=1/255.,
-            width_shift_range=0.1,
-            height_shift_range=0.1)
+            rescale=1/255.)
         val_datagen = ImageDataGenerator(rescale=1/255.)
 
         train_datagen.fit(self.x_train)
@@ -211,9 +218,9 @@ class GAN:
                 val_losses["d_acc_real"].append(d_loss_real[1] * 100)
                 val_losses["d_acc_fake"].append(d_loss_fake[1] * 100)
                 val_losses["g_loss"].append(g_loss)
-            losses["val_loss"] += val_losses["g_loss"]
-            losses["val_real_acc"] += val_losses["d_acc_real"]
-            losses["val_fake_acc"] += val_losses["d_acc_fake"]
+            losses["val_loss"].append(np.mean(val_losses["g_loss"]))
+            losses["val_real_acc"].append(np.mean(val_losses["d_acc_real"]))
+            losses["val_fake_acc"].append(np.mean(val_losses["d_acc_fake"]))
             # Plot the progress
             print("validation [D real loss: %.5a, fake loss: %.5a, real acc.: %.2f%%, fake acc.:%.2f%%] [G loss: %g] "
                   % (np.mean(val_losses["d_loss_real"]), np.mean(val_losses["d_loss_real"]),
@@ -247,7 +254,9 @@ class GAN:
         else:
             for i in range(r):
                 for j in range(c):
-                    axs[i, j].imshow(gen_imgs[count])
+                    img = gen_imgs[count] * 255
+                    img = img.astype(np.uint8)
+                    axs[i, j].imshow(img)
                     axs[i, j].axis('off')
                     count += 1
                 fig.savefig(self.sample_dir + "/%d.png" % epoch)
@@ -259,15 +268,15 @@ if __name__ == '__main__':
     gan = GAN(dataset)
     loss_dir = check_folder(dataset + '_losses/')
     # set epochs to 30 get good results
-    losses = gan.train(epochs=1, batch_size=64, label_smooth=False, sample_intervals=50)
+    losses = gan.train(epochs=30, batch_size=64, label_smooth=False, sample_intervals=50)
 
-    color = ['b', 'g', 'tab:orange', 'r', 'r', 'r', 'r']
+    color = ['b', 'g', 'g', 'tab:orange', 'r', 'r', 'r', 'r']
     sns.set(color_codes=True)
     sns.set_style("white")
     sns.set_context("notebook", font_scale=1, rc={"lines.linewidth": 1})
 
     for i, key in enumerate(losses.keys()):
-        if i <= 2:
+        if i <= 3:
             plt.plot(losses[key], color[i])
             plt.xlabel('iterations')
             plt.ylabel('loss')
@@ -276,7 +285,7 @@ if __name__ == '__main__':
             plt.close()
         else:
             plt.plot(losses[key], color[i])
-            plt.ylim((0, 100))
+            plt.ylim((0,100))
             plt.xlabel('iterations')
             plt.ylabel('accuracy')
             plt.savefig(loss_dir + key + ".png")
