@@ -7,6 +7,7 @@ Collection of implementation of deep learning papers in Keras, espeicially CNN, 
 
 ## Requirements
 - Keras >= 2.1.0
+- Tensorflow >= 1.8.0
 - numpy
 - matplotlib
 - seaborn
