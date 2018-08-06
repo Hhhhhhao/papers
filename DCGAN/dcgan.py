@@ -271,7 +271,7 @@ if __name__ == '__main__':
     gan = GAN(dataset)
     loss_dir = check_folder(dataset + '_losses/')
     # set epochs to 30 get good results
-    losses = gan.train(epochs=30, batch_size=64, label_smooth=False, sample_intervals=50)
+    losses = gan.train(epochs=1, batch_size=64, label_smooth=False, sample_intervals=50)
 
     color = ['b', 'g', 'g', 'tab:orange', 'r', 'r', 'r', 'r']
     sns.set(color_codes=True)
