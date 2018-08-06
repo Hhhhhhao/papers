@@ -128,10 +128,10 @@ class GAN:
             ch = ch * 2
 
         x = Flatten()(x)
-        # x = Dense(1024)(x)
-        # X = BatchNormalization()(x)
-        # x = LeakyReLU(alpha=0.2)(x)
-        # x = Dropout(0.25)(x)
+        x = Dense(1024)(x)
+        x = BatchNormalization()(x)
+        x = LeakyReLU(alpha=0.2)(x)
+        x = Dropout(0.25)(x)
         x_output = Dense(1, activation='sigmoid')(x)
 
         model = Model(inputs=x_input, outputs=x_output, name='discriminator')
