@@ -39,11 +39,11 @@ Results after training 15 epochs.
 
 Plot of training discriminator fake samples loss.  
 
-![dloss](./images/d_fake_losspng)
+![d fake loss](./images/d_fake_loss.png)
 
 Plot of training discriminator real samples loss.  
 
-![dloss](./images/d_real_losspng)
+![d real loss](./images/d_real_loss.png)
 
 ### Discriminator accuracy
 
