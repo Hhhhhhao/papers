@@ -13,7 +13,7 @@ Collection of implementation of deep learning papers in Keras, espeicially CNN, 
 
 ## Table of Contents
 * Implementations
-  + [Generative Adversarial Nets](./gan)
-  + [Deep Convolutional Generative Adversarial Networks](./dcgan)
+  + [Generative Adversarial Nets](GAN)
+  + [Deep Convolutional Generative Adversarial Networks](DCGAN)
 
 

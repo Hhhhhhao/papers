@@ -1,5 +1,5 @@
 from keras.datasets import mnist, cifar10
-from keras.layers import Input, Dense, Reshape, Flatten
+from keras.layers import Input, Dense, Reshape, Flatten, Dropout
 from keras.layers import Activation, Conv2D, UpSampling2D, BatchNormalization
 from keras.layers.advanced_activations import LeakyReLU
 from keras.models import Model
@@ -109,7 +109,7 @@ class GAN:
         return model
 
     def build_discriminator(self):
-        ch = 64
+        ch = 32
         x_input = Input(shape=self.img_shape)
         x = Conv2D(ch, kernel_size=5, strides=1, padding='same')(x_input)
         x = BatchNormalization()(x)
@@ -127,8 +127,11 @@ class GAN:
             x = LeakyReLU(alpha=0.2)(x)
             ch = ch * 2
 
-        x = Conv2D(4, kernel_size=5, strides=1, padding='same')(x)
         x = Flatten()(x)
+        # x = Dense(1024)(x)
+        # X = BatchNormalization()(x)
+        # x = LeakyReLU(alpha=0.2)(x)
+        # x = Dropout(0.25)(x)
         x_output = Dense(1, activation='sigmoid')(x)
 
         model = Model(inputs=x_input, outputs=x_output, name='discriminator')
