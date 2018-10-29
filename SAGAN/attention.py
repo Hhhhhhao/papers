@@ -43,6 +43,7 @@ class Attention(Layer):
                                     axes={3: input_shape[-1]})
         self.built = True
 
+
     def call(self, x):
         def hw_flatten(x):
             return K.reshape(x, shape=[K.shape(x)[0], K.shape(x)[1]*K.shape(x)[2], K.shape(x)[-1]])
@@ -60,11 +61,7 @@ class Attention(Layer):
                      strides=(1, 1), padding='same')  # [bs, h, w, c]
         h = K.bias_add(h, self.bias_h)
 
-        # N = h * w
-        #flatten_g = hw_flatten(g)
-        #flatten_f = hw_flatten(f)
         s = tf.matmul(hw_flatten(g), hw_flatten(f), transpose_b=True)  # # [bs, N, N]
-        #s = K.batch_dot(flatten_g, K.transpose(flatten_f), axes=[1,2])  # # [bs, N, N]
 
         beta = K.softmax(s, axis=-1)  # attention map
 
