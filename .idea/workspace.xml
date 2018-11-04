@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5ddddc6a-bc28-4849-a527-971a8c8fab04" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/SpectralNorm/SNLayers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SpectralNorm/sn.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AlexNet/data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AlexNet/model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AlexNet/train.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SAGAN/attention.py" beforeDir="false" afterPath="$PROJECT_DIR$/SAGAN/attention.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GAN/gan.py" beforeDir="false" afterPath="$PROJECT_DIR$/GAN/gan.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,11 +24,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="dcgan.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/DCGAN/dcgan.py">
+      <file leaf-file-name="gan.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/GAN/gan.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1815">
-              <caret line="131" column="8" selection-start-line="131" selection-start-column="8" selection-end-line="131" selection-end-column="8" />
+            <state relative-caret-position="300">
+              <caret line="216" column="80" selection-start-line="216" selection-start-column="80" selection-end-line="216" selection-end-column="80" />
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -70,6 +74,10 @@
         <option value="$PROJECT_DIR$/SpectralNorm/sn.py" />
         <option value="$PROJECT_DIR$/SpectralNorm/SNLayers.py" />
         <option value="$PROJECT_DIR$/SAGAN/attention.py" />
+        <option value="$PROJECT_DIR$/AlexNet/model.py" />
+        <option value="$PROJECT_DIR$/AlexNet/data.py" />
+        <option value="$PROJECT_DIR$/AlexNet/train.py" />
+        <option value="$PROJECT_DIR$/GAN/gan.py" />
       </list>
     </option>
   </component>
@@ -83,8 +91,8 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="53" />
-    <option name="y" value="23" />
+    <option name="x" value="1781" />
+    <option name="y" value="120" />
     <option name="width" value="1387" />
     <option name="height" value="877" />
   </component>
@@ -104,17 +112,12 @@
             <path>
               <item name="papers" type="b2602c69:ProjectViewProjectNode" />
               <item name="papers" type="462c0819:PsiDirectoryNode" />
-              <item name="DCGAN" type="462c0819:PsiDirectoryNode" />
+              <item name="AlexNet" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="papers" type="b2602c69:ProjectViewProjectNode" />
               <item name="papers" type="462c0819:PsiDirectoryNode" />
-              <item name="SAGAN" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="papers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="papers" type="462c0819:PsiDirectoryNode" />
-              <item name="SpectralNorm" type="462c0819:PsiDirectoryNode" />
+              <item name="GAN" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -273,7 +276,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="53" y="23" width="1387" height="877" extended-state="0" />
+    <frame x="1781" y="120" width="1387" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -311,24 +314,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/SAGAN/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="390">
-            <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DCGAN/dcgan.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1770">
-          <caret line="130" selection-start-line="130" selection-end-line="133" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spectralnorm/specnorm.py" />
     <entry file="file://$PROJECT_DIR$/SAGAN/sagan.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3495">
@@ -565,23 +550,6 @@
     <entry file="file://$PROJECT_DIR$/spectralnorm/specnorm.py" />
     <entry file="file://$PROJECT_DIR$/spectralnorm/dcgan.py" />
     <entry file="file://$PROJECT_DIR$/alexnet.py" />
-    <entry file="file://$PROJECT_DIR$/GAN/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="120">
-            <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="96" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GAN/gan.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -660,8 +628,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DCGAN/dcgan.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1815">
+        <state relative-caret-position="15">
           <caret line="131" column="8" selection-start-line="131" selection-start-column="8" selection-end-line="131" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AlexNet/model.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AlexNet/data.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AlexNet/train.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GAN/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="120">
+            <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="96" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GAN/gan.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="216" column="80" selection-start-line="216" selection-start-column="80" selection-end-line="216" selection-end-column="80" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
